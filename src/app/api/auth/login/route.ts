@@ -2,14 +2,27 @@ import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import bcrypt from 'bcryptjs'
 
-export async function POST(request: NextRequest) {
+export async function POST(request) {
   try {
+    console.log('Login attempt started')
     const { username, password } = await request.json()
 
     if (!username || !password) {
       return NextResponse.json(
         { error: 'Username and password are required' },
         { status: 400 }
+      )
+    }
+
+    // Coba koneksi database dulu
+    try {
+      await db.$connect()
+      console.log('Database connected')
+    } catch (dbError) {
+      console.error('Database connection failed:', dbError)
+      return NextResponse.json(
+        { error: 'Database connection failed' },
+        { status: 500 }
       )
     }
 
@@ -45,9 +58,10 @@ export async function POST(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Login error:', error)
+    console.error('Detailed login error:', error)
+    console.error('Error stack:', error.stack)
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Internal server error: ' + error.message },
       { status: 500 }
     )
   }
