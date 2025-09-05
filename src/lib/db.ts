@@ -24,7 +24,7 @@ async function initializeDatabase() {
     // Create User table
     await db.$executeRaw`
       CREATE TABLE IF NOT EXISTS "User" (
-        "id" TEXT NOT NULL PRIMARY KEY,
+        "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         "username" TEXT NOT NULL UNIQUE,
         "password" TEXT NOT NULL,
         "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -34,13 +34,13 @@ async function initializeDatabase() {
     // Create Document table
     await db.$executeRaw`
       CREATE TABLE IF NOT EXISTS "Document" (
-        "id" TEXT NOT NULL PRIMARY KEY,
+        "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         "filename" TEXT NOT NULL,
         "originalName" TEXT NOT NULL,
         "mimeType" TEXT NOT NULL,
         "size" INTEGER NOT NULL,
         "path" TEXT NOT NULL,
-        "uploadedBy" TEXT NOT NULL,
+        "uploadedBy" INTEGER NOT NULL,
         "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY ("uploadedBy") REFERENCES "User" ("id") ON DELETE CASCADE
       );
@@ -49,7 +49,7 @@ async function initializeDatabase() {
     // Create Budget table
     await db.$executeRaw`
       CREATE TABLE IF NOT EXISTS "Budget" (
-        "id" TEXT NOT NULL PRIMARY KEY,
+        "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         "category" TEXT NOT NULL,
         "amount" REAL NOT NULL,
         "spent" REAL NOT NULL DEFAULT 0,
