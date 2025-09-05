@@ -1,14 +1,5 @@
-generator client {
-  provider = "prisma-client-js"
-}
-
-datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
-}
-
 model User {
-  id        String    @id
+  id        String    @id @default(uuid())
   username  String    @unique
   password  String
   createdAt DateTime  @default(now())
@@ -18,7 +9,7 @@ model User {
 }
 
 model Document {
-  id           String   @id
+  id           String   @id @default(uuid())
   filename     String
   originalName String
   mimeType     String
@@ -31,7 +22,7 @@ model Document {
 }
 
 model Budget {
-  id        String   @id
+  id        String   @id @default(uuid())
   category  String
   amount    Float
   spent     Float    @default(0)
