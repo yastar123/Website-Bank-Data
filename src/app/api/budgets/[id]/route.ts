@@ -3,10 +3,12 @@ import { db } from '@/lib/db'
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const budgetId = parseInt(params.id)
+    // Await the params Promise
+    const resolvedParams = await params
+    const budgetId = parseInt(resolvedParams.id)
     const { activity, planned, realized, date } = await request.json()
 
     if (isNaN(budgetId)) {
@@ -52,10 +54,12 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const budgetId = parseInt(params.id)
+    // Await the params Promise
+    const resolvedParams = await params
+    const budgetId = parseInt(resolvedParams.id)
 
     if (isNaN(budgetId)) {
       return NextResponse.json(
